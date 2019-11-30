@@ -7,11 +7,26 @@ loginForm.addEventListener("submit", e => {
   login();
 });
 
+onload();
+
 async function login() {
   // petición a /auth/login
-  const response = await makeRequest("/api/auth/login", "POST", {
+  const res = await makeRequest("/api/auth/login", "POST", {
     email: email.value,
     password: password.value
   });
+  const response = await res.json();
   console.log(response);
+  if (response.success === true) {
+    sessionStorage.setItem("token", response.token);
+    window.location.replace("/dashboard.html");
+  } else {
+    if (response.error) alert(response.error);
+    else alert("Unknown Error");
+  }
+}
+
+function onload() {
+  if (sessionStorage.getItem("token"))
+    window.location.replace("/dashboard.html");
 }

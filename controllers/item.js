@@ -60,11 +60,14 @@ exports.updateItem = asyncHandler(async (req, res) => {
   if (!item.user === req.user._id)
     throw new ErrorResponse("Resource not found", 404);
 
-  item = await Item.findOneAndUpdate(id, req.body, {
-    new: true,
-    runValidators: true
+  item = await Item.findOneAndUpdate({ _id: id }, req.body, {
+    new: true
   });
 
+  console.log({
+    success: true,
+    item
+  });
   return res.json({
     success: true,
     item
@@ -84,7 +87,7 @@ exports.deleteItem = asyncHandler(async (req, res) => {
   if (!item.user === req.user._id)
     throw new ErrorResponse("Resource not found", 404);
 
-  await Item.findOneAndDelete(id);
+  await Item.findOneAndDelete({ _id: id });
 
   return res.json({
     success: true
